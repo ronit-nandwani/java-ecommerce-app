@@ -1,5 +1,6 @@
 package com.ronit.productservice.controllers;
 
+import com.ronit.productservice.exceptions.ProductNotFoundException;
 import com.ronit.productservice.models.Product;
 import com.ronit.productservice.services.ProductService;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public Product getSingleProduct(@PathVariable("id") Long productId) {
+    public Product getSingleProduct(@PathVariable("id") Long productId) throws ProductNotFoundException {
         return productService.getSingleProduct(productId);
     }
 

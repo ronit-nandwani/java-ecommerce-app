@@ -1,6 +1,7 @@
 package com.ronit.productservice.services;
 
 import com.ronit.productservice.dtos.FakeStoreProductDto;
+import com.ronit.productservice.exceptions.ProductNotFoundException;
 import com.ronit.productservice.models.Category;
 import com.ronit.productservice.models.Product;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,13 @@ public class FakeStoreProductService implements ProductService {
         this.restTemplate = restTemplate;
     }
     @Override
-    public Product getSingleProduct(Long productId) {
+    public Product getSingleProduct(Long productId) throws ProductNotFoundException {
         ResponseEntity<FakeStoreProductDto> responseEntity = restTemplate.getForEntity("https://fakestoreapi.com/products/" + productId, FakeStoreProductDto.class);
         FakeStoreProductDto fakeStoreProductDto = responseEntity.getBody();
+
+        if (fakeStoreProductDto == null) {
+            throw new ProductNotFoundException(productId);
+       }
 
         return convertFakeStoreProductDtoToProduct(fakeStoreProductDto);
     }
