@@ -3,6 +3,7 @@ package com.ronit.productservice.controllers;
 import com.ronit.productservice.exceptions.ProductNotFoundException;
 import com.ronit.productservice.models.Product;
 import com.ronit.productservice.services.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class ProductController {
     private ProductService productService;
 
-    public ProductController(ProductService productService) {
+    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService) {
         this.productService = productService;
     }
 
