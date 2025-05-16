@@ -31,6 +31,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
 //    @Query("select title from products where id = ?")
 //    Optional<Product> findProductTitleById(Long productId);
+
+    Product save(Product product);
 }
 
 

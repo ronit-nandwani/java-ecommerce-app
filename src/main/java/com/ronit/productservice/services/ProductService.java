@@ -1,5 +1,6 @@
 package com.ronit.productservice.services;
 
+import com.ronit.productservice.exceptions.CategoryNotFoundException;
 import com.ronit.productservice.exceptions.ProductNotFoundException;
 import com.ronit.productservice.models.Product;
 
@@ -10,7 +11,7 @@ public interface ProductService {
 
     List<Product> getAllProducts();
 
-    Product createProduct(Product product);
+    Product createProduct(Product product) throws CategoryNotFoundException;
 
-    boolean deleteProduct(Long productId);
+    void deleteProduct(Long productId) throws ProductNotFoundException;
 }

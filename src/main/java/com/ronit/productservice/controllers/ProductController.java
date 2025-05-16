@@ -1,5 +1,6 @@
 package com.ronit.productservice.controllers;
 
+import com.ronit.productservice.exceptions.CategoryNotFoundException;
 import com.ronit.productservice.exceptions.ProductNotFoundException;
 import com.ronit.productservice.models.Product;
 import com.ronit.productservice.services.ProductService;
@@ -15,7 +16,7 @@ import java.util.List;
 public class ProductController {
     private ProductService productService;
 
-    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService) {
         this.productService = productService;
     }
 
@@ -30,12 +31,12 @@ public class ProductController {
     }
 
     @PostMapping("/")
-    public Product createProduct(@RequestBody Product product){
-        return new Product();
+    public Product createProduct(@RequestBody Product product) throws CategoryNotFoundException {
+        return productService.createProduct(product);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable("id") Long productId){
-        return null;
+    public void deleteProduct(@PathVariable("id") Long productId) throws ProductNotFoundException {
+        productService.deleteProduct(productId);
     }
 }
