@@ -4,23 +4,17 @@ import com.ronit.productservice.exceptions.CategoryNotFoundException;
 import com.ronit.productservice.models.Category;
 import com.ronit.productservice.models.Product;
 import com.ronit.productservice.exceptions.ProductNotFoundException;
-import com.ronit.productservice.models.Product;
-import com.ronit.productservice.repositories.CategoryRepository;
 import com.ronit.productservice.repositories.ProductRepository;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service("selfProductService")
 public class SelfProductService implements ProductService {
     private ProductRepository productRepository;
-    private CategoryRepository categoryRepository;
 
-    public SelfProductService(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public SelfProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
-        this.categoryRepository = categoryRepository;
     }
 
     @Override
@@ -50,17 +44,17 @@ public class SelfProductService implements ProductService {
             throw new CategoryNotFoundException("Product can't be created without category, Please try again with category.");
         }
 
-        //Find the category with the title
-        Optional<Category> optionalCategory = categoryRepository.findByTitle(category.getTitle());
-
-        if (optionalCategory.isEmpty()) {
-            //There's no category in the DB with the given title.
-            //Create a category object and save it in the DB.
-            category = categoryRepository.save(category);
-        } else {
-            category = optionalCategory.get();
-        }
-        product.setCategory(category);
+//        //Find the category with the title
+//        Optional<Category> optionalCategory = categoryRepository.findByTitle(category.getTitle());
+//
+//        if (optionalCategory.isEmpty()) {
+//            //There's no category in the DB with the given title.
+//            //Create a category object and save it in the DB.
+//            category = categoryRepository.save(category);
+//        } else {
+//            category = optionalCategory.get();
+//        }
+//        product.setCategory(category);
 
         return productRepository.save(product);
     }

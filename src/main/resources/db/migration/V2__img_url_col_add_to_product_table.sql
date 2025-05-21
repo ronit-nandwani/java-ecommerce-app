@@ -1,0 +1,1 @@
+ALTER TABLE product ADD img_url VARCHAR(255) NULL;
