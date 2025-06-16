@@ -1,5 +1,6 @@
 package com.ronit.productservice.controllers;
 
+import com.ronit.productservice.commons.AuthCommons;
 import com.ronit.productservice.exceptions.CategoryNotFoundException;
 import com.ronit.productservice.exceptions.ProductNotFoundException;
 import com.ronit.productservice.models.Product;
@@ -14,14 +15,22 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+    private AuthCommons authCommons;
     private ProductService productService;
 
-    public ProductController(@Qualifier("selfProductService") ProductService productService) {
+    public ProductController(@Qualifier("selfProductService") ProductService productService, AuthCommons authCommons) {
         this.productService = productService;
+        this.authCommons = authCommons;
     }
 
     @GetMapping("/{id}")
     public Product getSingleProduct(@PathVariable("id") Long productId) throws ProductNotFoundException {
+        //UserDto userDto = authCommons.validateToken(token);
+
+//        if (userDto == null) {
+//            //UnAuthorized access.
+//            throw new UnAuthorizedException("Invalid token provided.");
+//        }
         return productService.getSingleProduct(productId);
     }
 
