@@ -5,6 +5,7 @@ import com.ronit.productservice.models.Category;
 import com.ronit.productservice.models.Product;
 import com.ronit.productservice.exceptions.ProductNotFoundException;
 import com.ronit.productservice.repositories.ProductRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +13,11 @@ import java.util.List;
 @Service("selfProductService")
 public class SelfProductService implements ProductService {
     private ProductRepository productRepository;
+    private RedisTemplate<String, Object> redisTemplate;
 
-    public SelfProductService(ProductRepository productRepository) {
+    public SelfProductService(ProductRepository productRepository, RedisTemplate<String, Object> redisTemplate) {
         this.productRepository = productRepository;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -27,8 +30,23 @@ public class SelfProductService implements ProductService {
 //
 //        return optionalProduct.get();
 
-        return productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException(productId));
+        //First check if the Product with the input productId exists in the Redis.
+        Product product = (Product) redisTemplate.opsForHash().get("PRODUCTS", "PRODUCT_" + productId);
+
+        if (product != null) {
+            //Product exists in Redis, return it.
+            //CACHE HIT
+            return product;
+        }
+
+        // CACHE MISS
+
+        redisTemplate.opsForHash().put("PRODUCTS", "PRODUCT_" + productId, product);
+
+        product = productRepository.findById(productId).orElseThrow(() -> new ProductNotFoundException(productId));
+
+
+        return product;
     }
 
     @Override
