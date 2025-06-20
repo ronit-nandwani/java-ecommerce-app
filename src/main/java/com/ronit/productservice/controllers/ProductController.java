@@ -6,6 +6,7 @@ import com.ronit.productservice.exceptions.ProductNotFoundException;
 import com.ronit.productservice.models.Product;
 import com.ronit.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,5 +48,10 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable("id") Long productId) throws ProductNotFoundException {
         productService.deleteProduct(productId);
+    }
+
+    @GetMapping("/title/{title}/{pageNumber}/{pageSize}")
+    public Page<Product> getProductByTitle(@PathVariable("title") String title, @PathVariable("pageNumber") int pageNumber, @PathVariable("pageSize") int pageSize) {
+        return productService.getProductsByTitle(title, pageNumber, pageSize);
     }
 }

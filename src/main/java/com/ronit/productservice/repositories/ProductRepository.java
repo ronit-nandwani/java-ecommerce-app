@@ -2,6 +2,8 @@ package com.ronit.productservice.repositories;
 
 import com.ronit.productservice.models.Category;
 import com.ronit.productservice.models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     //iPhone
     //select * from products where lower(title) LIKE '%iphone%'
-    List<Product> findByTitleContainsIgnoreCase(String title);
+    Page<Product> findByTitleContainsIgnoreCase(String title, Pageable pageable);
 
     //find all the products where price >= 100 and <= 1000
     List<Product> findByPriceBetween(Double priceAfter, Double priceBefore);

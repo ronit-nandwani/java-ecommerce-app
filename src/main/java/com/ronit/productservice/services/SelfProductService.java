@@ -5,6 +5,9 @@ import com.ronit.productservice.models.Category;
 import com.ronit.productservice.models.Product;
 import com.ronit.productservice.exceptions.ProductNotFoundException;
 import com.ronit.productservice.repositories.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -83,5 +86,28 @@ public class SelfProductService implements ProductService {
             throw new ProductNotFoundException(productId);
         }
         productRepository.deleteById(productId);
+    }
+
+    @Override
+    public Page<Product> getProductsByTitle(String title, int pageNumber, int pageSize) {
+//        Sort sort = Sort
+//                .by(Sort.Direction.ASC, "price")
+//                .by(Sort.Direction.DESC, "title");
+
+//        Sort sort = null;
+//        if (sortInput.equals("ASC")) {
+//            sort = Sort.by(Sort.Direction.ASC, "price");
+//        } else {
+//            sort = Sort.by(Sort.Direction.DESC, "price");
+//        }
+//
+//        sort.by(......)
+
+        return productRepository.findByTitleContainsIgnoreCase(
+                title,
+                PageRequest.of(pageNumber,
+                        pageSize,
+                        Sort.by(Sort.Direction.ASC, "price").by(Sort.Direction.ASC, "title"))
+        );
     }
 }
