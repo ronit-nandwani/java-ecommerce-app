@@ -1,8 +1,10 @@
 package com.ronit.productservice.controllers;
 
 import com.ronit.productservice.commons.AuthCommons;
+import com.ronit.productservice.dtos.UserDto;
 import com.ronit.productservice.exceptions.CategoryNotFoundException;
 import com.ronit.productservice.exceptions.ProductNotFoundException;
+import com.ronit.productservice.exceptions.UnAuthorizedException;
 import com.ronit.productservice.models.Product;
 import com.ronit.productservice.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,12 +28,12 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public Product getSingleProduct(@PathVariable("id") Long productId) throws ProductNotFoundException {
-        //UserDto userDto = authCommons.validateToken(token);
+        UserDto userDto = authCommons.validateToken("sampletoken");
 
-//        if (userDto == null) {
-//            //UnAuthorized access.
-//            throw new UnAuthorizedException("Invalid token provided.");
-//        }
+        if (userDto == null) {
+            //UnAuthorized access.
+            throw new UnAuthorizedException("Invalid token provided.");
+        }
         return productService.getSingleProduct(productId);
     }
 
